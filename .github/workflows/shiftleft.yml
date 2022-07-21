@@ -35,7 +35,9 @@ jobs:
       run: ${GITHUB_WORKSPACE}/sl analyze --strict --wait --analysis-timeout=1h --app Benchmark --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg target/benchmark.war
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-        
+        SHIFTLEFT_API_HOST: www-ext.stg.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: SL_EXTERNAL_GRPC_TELEMETRY_HOST_TOKEN
+        SHIFTLEFT_GRPC_API_HOST: api-ext.stg.shiftleft.io:443
   OWASP-Benchmark-Score:
     runs-on: ubuntu-20.04
     needs: NextGen-Static-Analysis
@@ -55,7 +57,9 @@ jobs:
         python3 export.py --app Benchmark -f sl -o ${GITHUB_WORKSPACE}/ngsast_results/Benchmark.sl
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-        
+        SHIFTLEFT_API_HOST: www-ext.stg.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: SL_EXTERNAL_GRPC_TELEMETRY_HOST_TOKEN
+        SHIFTLEFT_GRPC_API_HOST: api-ext.stg.shiftleft.io:443
     - name: Package with maven
       run: mvn compile package
     - name: Calculate OWASP Benchmark Score
@@ -94,9 +98,11 @@ jobs:
       if: github.event_name == 'pull_request'
       env:
         OWASP_BENCHMARK_CHECKSUM: ${{ env.OWASP_BENCHMARK_CHECKSUM }}
-        SHIFTLEFT_USER_ID_V2: 97d1967c-969f-45a1-bacc-2e1fc253cbfd
+        SHIFTLEFT_USER_ID_V2: 80c3d338-2dfe-471f-ac72-26f275d1646c
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-        
+        SHIFTLEFT_API_HOST: www-ext.stg.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: SL_EXTERNAL_GRPC_TELEMETRY_HOST_TOKEN
+        SHIFTLEFT_GRPC_API_HOST: api-ext.stg.shiftleft.io:443
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
